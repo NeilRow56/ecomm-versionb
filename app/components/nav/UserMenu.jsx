@@ -6,9 +6,12 @@ import Avatar from "./Avatar";
 import { useCallback, useState } from "react";
 import MenuItem from "./MenuItem";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
+import useProductModal from "@/app/hooks/useProductModal";
+
 import useLoginModal from "@/app/hooks/useLoginModal";
 
 const UserMenu = ({ currentUser }) => {
+  const productModal = useProductModal();
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
   const [isOpen, setIsOpen] = useState(false);
@@ -71,7 +74,10 @@ const UserMenu = ({ currentUser }) => {
             {currentUser ? (
               <>
                 <hr />
-                <MenuItem label="Adimin1" onClick={() => {}} />
+                <MenuItem
+                  label="Create new Product"
+                  onClick={productModal.onOpen}
+                />
                 <MenuItem label="Admin2" onClick={() => {}} />
                 <MenuItem label="Admin3" onClick={() => {}} />
 

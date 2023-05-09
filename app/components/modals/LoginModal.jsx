@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 import useLoginModal from "@/app/hooks/useLoginModal";
 import Modal from "./Modal";
-import Input from "../Input";
+import Input from "../inputs/Input";
 import Heading from "../Heading";
 import { toast } from "react-hot-toast";
 import { signIn } from "next-auth/react";

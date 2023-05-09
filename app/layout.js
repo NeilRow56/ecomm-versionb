@@ -6,6 +6,7 @@ import { Nunito } from "next/font/google";
 import ToasterProvider from "../app/providers/ToastProvider";
 import LoginModal from "./components/modals/LoginModal";
 import getCurrentUser from "./actions/getCurrentUser";
+import ProductModal from "./components/modals/ProductModal";
 
 export const metadata = {
   title: "Ecommerce Admin",
@@ -24,6 +25,7 @@ export default async function RootLayout({ children }) {
         <ToasterProvider />
         <LoginModal />
         <RegisterModal />
+        <ProductModal />
         <div className="h-screen bg-blue-900">
           <div className="pl-12 lg:pl-48 mx-auto h-full w-full">
             <div className="grid h-full grid-cols-12">

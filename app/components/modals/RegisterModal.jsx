@@ -11,7 +11,7 @@ import useLoginModal from "@/app/hooks/useLoginModal";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 
 import Modal from "./Modal";
-import Input from "../Input";
+import Input from "../inputs/Input";
 import Heading from "../Heading";
 import { toast } from "react-hot-toast";
 import Button from "../Button";
