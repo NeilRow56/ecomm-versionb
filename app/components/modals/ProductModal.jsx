@@ -117,6 +117,33 @@ const ProductModal = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(STEPS.CATEGORY);
 
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+    reset,
+  } = useForm({
+    defaultValues: {
+      category: "",
+      imageSrc: "",
+      price: 1,
+      title: "",
+      description: "",
+    },
+  });
+
+  const category = watch("category");
+
+  const setCustomValue = (id, value) => {
+    setValue(id, value, {
+      shouldDirty: true,
+      shouldTouch: true,
+      shouldValidate: true,
+    });
+  };
+
   const onBack = () => {
     setStep((value) => value - 1);
   };
@@ -160,8 +187,8 @@ const ProductModal = () => {
         {categories.map((item) => (
           <div key={item.label} className="col-span-1">
             <CategoryInput
-              onClick={() => {}}
-              selected={false}
+              onClick={(category) => setCustomValue("category", category)}
+              selected={category === item.label}
               label={item.label}
               icon={item.icon}
             />
