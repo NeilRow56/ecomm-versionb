@@ -1,9 +1,12 @@
 "use client";
 
+import axios from "axios";
+import { toast } from "react-hot-toast";
+
 import useProductModal from "@/app/hooks/useProductModal";
 import Modal from "./Modal";
 import { useCallback, useState, useMemo } from "react";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import Heading from "../Heading";
 import Input from "../inputs/Input";
 import TextArea from "../inputs/TextArea";
@@ -23,15 +26,16 @@ import { FaSkiing } from "react-icons/fa";
 import { BsSnow } from "react-icons/bs";
 import { IoDiamond } from "react-icons/io5";
 import { MdOutlineVilla } from "react-icons/md";
+import ImageUpload from "../inputs/ImageUpload";
+import { useRouter } from "next/navigation";
 
 // javascript alternative to typescript enums
 
 const STEPS = Object.freeze({
   CATEGORY: 0,
-  NAME: 1,
-  DESCRIPTION: 2,
-  IMAGES: 3,
-  PRICE: 4,
+  DESCRIPTION: 1,
+  IMAGES: 2,
+  PRICE: 3,
 });
 
 const categories = [
@@ -113,7 +117,9 @@ const categories = [
 ];
 
 const ProductModal = () => {
+  const router = useRouter();
   const productModal = useProductModal();
+
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(STEPS.CATEGORY);
 
@@ -135,6 +141,7 @@ const ProductModal = () => {
   });
 
   const category = watch("category");
+  const imageSrc = watch("imageSrc");
 
   const setCustomValue = (id, value) => {
     setValue(id, value, {
@@ -150,6 +157,31 @@ const ProductModal = () => {
 
   const onNext = () => {
     setStep((value) => value + 1);
+  };
+
+  //Submit Handler
+  const onSubmit = (data) => {
+    if (step !== STEPS.PRICE) {
+      return onNext();
+    }
+
+    setIsLoading(true);
+
+    axios
+      .post("/api/products", data)
+      .then(() => {
+        toast.success("Product created!");
+        router.refresh();
+        reset();
+        setStep(STEPS.CATEGORY);
+        productModal.onClose();
+      })
+      .catch(() => {
+        toast.error("Something went wrong.");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const actionLabel = useMemo(() => {
@@ -198,16 +230,72 @@ const ProductModal = () => {
     </div>
   );
 
+  if (step === STEPS.DESCRIPTION) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <Heading title="Product name and description" subtitle="" />
+        <Input
+          id="title"
+          label="Name"
+          disabled={isLoading}
+          register={register}
+          errors={errors}
+          required
+        />
+        <hr />
+        <TextArea
+          id="description"
+          label="Description"
+          disabled={isLoading}
+          register={register}
+          errors={errors}
+          required
+        />
+      </div>
+    );
+  }
+
+  if (step === STEPS.IMAGES) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <Heading
+          title="Add a photo of product"
+          subtitle="Show customers what the product looks like!"
+        />
+        <ImageUpload
+          onChange={(value) => setCustomValue("imageSrc", value)}
+          value={imageSrc}
+        />
+      </div>
+    );
+  }
+
+  if (step === STEPS.PRICE) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <Heading title="Enter retail price" subtitle="Price per unit" />
+        <Input
+          id="price"
+          label="Price"
+          formatPrice
+          type="number"
+          disabled={isLoading}
+          register={register}
+          errors={errors}
+          required
+        />
+      </div>
+    );
+  }
   return (
     <Modal
-      disabled={isLoading}
       isOpen={productModal.isOpen}
       onClose={productModal.onClose}
-      onSubmit={productModal.onClose}
+      onSubmit={handleSubmit(onSubmit)}
       actionLabel={actionLabel}
       secondaryActionLabel={secondaryActionLabel}
       secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
-      title="New Product Details"
+      title="Add new product details!"
       body={bodyContent}
     />
   );

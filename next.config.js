@@ -4,7 +4,11 @@ const nextConfig = {
     appDir: true,
   },
   images: {
-    domains: ["randomuser.me", "lh3.googleusercontent.com"],
+    domains: [
+      "randomuser.me",
+      "lh3.googleusercontent.com",
+      "res.cloudinary.com",
+    ],
   },
 };
 
