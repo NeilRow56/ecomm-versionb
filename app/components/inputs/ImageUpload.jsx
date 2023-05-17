@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useCallback } from "react";
 import { TbPhotoPlus } from "react-icons/tb";
 
-const uploadPreset = "normdgak";
+const uploadPreset = "pujzo469";
 
 const ImageUpload = ({ onChange, value }) => {
   const handleUpload = useCallback(
